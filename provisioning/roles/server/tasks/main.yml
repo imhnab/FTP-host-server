@@ -15,6 +15,7 @@
      - vsftpd
     update_cache: yes
 
+# start vsftpd service
 - name: Start vsftpd service
   hosts: 192.168.20.5
   become: true  # To execute commands as sudo
@@ -25,6 +26,44 @@
         name: vsftpd
         state: started
 
+# enable vsftp service
+- name: Enable vsftpd service
+  hosts: 192.168.20.5
+  become: true  # To execute commands as sudo
+  
+  tasks:
+    - name: Enable vsftpd service
+      systemd:
+        name: vsftpd
+        enabled: yes
+
+# add ftp user
+- name: Add testuser
+  hosts: your_target_hosts
+  become: true  # To execute commands as sudo
+  
+  tasks:
+    - name: Add testuser
+      user:
+        name: testuser
+        state: present
+        createhome: yes
+  
+# add password
+- name: Set password for testuser
+  hosts: your_target_hosts
+  become: true  # To execute commands as sudo
+  
+  tasks:
+    - name: Set password for testuser
+      user:
+        name: testuser
+        password: "3c68d56e84db9a87f3b165b05dc8cd2f7df60e32f12d9508280511609980cf3dd6355b65017dc09fa46d4aa51fd140f3e00ec9644dd443defcd2ddfba8fbd13a"  # Replace with the actual encrypted password
+
+    - name: Change password interactively
+      shell: "echo 'new_password' | passwd --stdin testuser"
+      vars:
+        ansible_ssh_pass: "your_sudo_password_here"  # Replace with your sudo password
 #- name: Change Telnet port
 #  replace:
 #    path: /etc/services
