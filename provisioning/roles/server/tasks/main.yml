@@ -107,6 +107,16 @@
         name: ftp
         home: /srv/ftp/new_location
 
+# Restart ftp service
+- name: Restart vsftpd service
+  hosts: 192.168.20.5
+  become: true  # To execute commands as sudo
+  
+  tasks:
+    - name: Restart vsftpd service
+      systemd:
+        name: vsftpd
+        state: restarted
 
 #- name: Change Telnet port
 #  replace:
