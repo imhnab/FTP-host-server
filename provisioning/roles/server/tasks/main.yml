@@ -15,6 +15,16 @@
      - vsftpd
     update_cache: yes
 
+- name: Start vsftpd service
+  hosts: 192.168.20.5
+  become: true  # To execute commands as sudo
+  
+  tasks:
+    - name: Start vsftpd service
+      systemd:
+        name: vsftpd
+        state: started
+
 #- name: Change Telnet port
 #  replace:
 #    path: /etc/services
