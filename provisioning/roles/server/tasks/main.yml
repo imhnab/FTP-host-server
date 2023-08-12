@@ -39,7 +39,7 @@
 
 # add ftp user
 - name: Add testuser
-  hosts: your_target_hosts
+  hosts: 192.168.20.5
   become: true  # To execute commands as sudo
   
   tasks:
@@ -51,7 +51,7 @@
   
 # add password
 - name: Set password for testuser
-  hosts: your_target_hosts
+  hosts: 192.168.20.5
   become: true  # To execute commands as sudo
   
   tasks:
@@ -64,6 +64,28 @@
       shell: "echo 'new_password' | passwd --stdin testuser"
       vars:
         ansible_ssh_pass: "your_sudo_password_here"  # Replace with your sudo password
+
+
+- name: Allow port 20/tcp with ufw
+  hosts: 192.168.20.5
+  become: true  # To execute commands as sudo
+  
+  tasks:
+    - name: Allow port 20/tcp
+      ufw:
+        rule: allow
+        port: 20/tcp
+
+- name: Allow port 21/tcp with ufw
+  hosts: 192.168.20.5
+  become: true  # To execute commands as sudo
+  
+  tasks:
+    - name: Allow port 21/tcp
+      ufw:
+        rule: allow
+        port: 21/tcp
+        
 #- name: Change Telnet port
 #  replace:
 #    path: /etc/services
