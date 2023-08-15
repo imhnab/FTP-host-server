@@ -15,6 +15,8 @@
      - vsftpd
     update_cache: yes
 
+########################################################################################
+
 # start vsftpd service
 - name: Start vsftpd service
   hosts: 192.168.20.5
@@ -143,12 +145,25 @@
         path: /etc/vsftpd/user_config_dir
         state: directory
 
-# Create 
-- name: Create userlist file
+# Create testuser file
+- name: Create testuser file
   copy:
     dest: /etc/vsftpd/user_config_dir/testuser
     src: testuser
     force: true
+
+# Restart FTP
+- name: Restart vsftpd service
+  hosts: your_target_hosts
+  become: true  # To execute commands as sudo
+  
+  tasks:
+    - name: Restart vsftpd service
+      systemd:
+        name: vsftpd
+        state: restarted
+
+########################################################################################
 
 #- name: Change Telnet port
 #  replace:
