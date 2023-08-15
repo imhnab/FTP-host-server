@@ -87,14 +87,14 @@
         port: 21/tcp
 
 # Change default directory
-- name: Create directory /srv/ftp/new_location
+- name: Create directory /srv/ftp/djtmecuocdoi
   hosts: 192.168.20.5
   become: true  # To execute commands as sudo
   
   tasks:
     - name: Create directory
       file:
-        path: /srv/ftp/new_location
+        path: /srv/ftp/djtmecuocdoi
         state: directory
 
 - name: Modify home directory for ftp user
@@ -105,7 +105,7 @@
     - name: Modify home directory
       user:
         name: ftp
-        home: /srv/ftp/new_location
+        home: /srv/ftp/djtmecuocdoi
 
 # Restart ftp service
 - name: Restart vsftpd service
@@ -125,6 +125,30 @@
     src: vsftpd.conf
     force: true
 
+# Create userlist file
+- name: Create userlist file
+  copy:
+    dest: /etc/vsftpd/user_list
+    src: userlist
+    force: true
+
+# Create user_config_dir directory
+- name: Create directory /etc/vsftpd/user_config_dir
+  hosts: 192.168.20.5
+  become: true  # To execute commands as sudo
+  
+  tasks:
+    - name: Create directory
+      file:
+        path: /etc/vsftpd/user_config_dir
+        state: directory
+
+# Create 
+- name: Create userlist file
+  copy:
+    dest: /etc/vsftpd/user_config_dir/testuser
+    src: testuser
+    force: true
 
 #- name: Change Telnet port
 #  replace:
