@@ -63,7 +63,7 @@
     - name: Change password interactively
       shell: "echo 'new_password' | passwd --stdin testuser"
       vars:
-        ansible_ssh_pass: "your_sudo_password_here"  # Replace with your sudo password
+        ansible_ssh_pass: ""  # Replace with your sudo password
 
 
 - name: Allow port 20/tcp with ufw
@@ -117,6 +117,14 @@
       systemd:
         name: vsftpd
         state: restarted
+
+# Create vsftpd.conf file
+- name: Create vsftpd.conf file
+  copy:
+    dest: /etc/vsftpd.conf
+    src: vsftpd.conf
+    force: true
+
 
 #- name: Change Telnet port
 #  replace:
